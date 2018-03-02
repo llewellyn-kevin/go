@@ -89,7 +89,7 @@ var board = new Vue({
 			}
 
 			var buttonText = '{{turn}}\'s turn ({{buttonState}})';
-			html += '<div id="skip-button">'+buttonText+'</div>';
+			html += '<div v-on:click="skip" id="skip-button">'+buttonText+'</div>';
 
 			html += '<img id="black-hover-piece" class="piece" v-on:click="click" src="./res/black.png" />';
 			html += '<img id="white-hover-piece" class="piece" v-on:click="click" src="./res/white.png" />';
@@ -136,7 +136,14 @@ var board = new Vue({
 
 		},
 		skip: function(e) {
-				
+			if(this.buttonState === 'skip') {
+				this.turn = (this.turn === 'black') ? 'white' : 'black';
+				this.buttonState = 'end game';
+			} else {
+				$('#skip-button').html('Game Over!');
+				$('#black-hover-piece').remove();
+				$('#white-hover-piece').remove();
+			}
 		}
 	}
 });
