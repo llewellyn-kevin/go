@@ -72,14 +72,6 @@ var board = new Vue({
 			html += '<img id="black-hover-piece" class="piece" v-on:click="click" src="./res/black.png" />';
 			html += '<img id="white-hover-piece" class="piece" v-on:click="click" src="./res/white.png" />';
 
-			for(i = 0; i < this.board.length; i++) {
-				for(j = 0; j < this.board[i].length; j++) {
-					var space = this.board[i][j];
-					if(space) {
-											}
-				}
-			}
-
 			$('div#board').html(html);
 		},
 		hover: function(e) {
