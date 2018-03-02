@@ -4,11 +4,54 @@
 		<link rel="stylesheet" type="text/css" href="style.css" />
 	</head>
 	<body>
+		<div id="content">
+			<div id="front">
+				<h1>go</h1>
+				<p>
+					Go is fun. It is too hard to have a board at the right time. Here is the online emulator to solve all of your Japanese board game needs.
+				</p>
+			</div>
+			<div id="rules">
+				<h1>rules</h1>
+					<ul>
+						<li>
+							Black moves first. The players alternate thereafter.
+						</li>
+						<li>
+							When it is their turn, a player may either pass (by announcing "pass" and performing no action) or play. A play consists of the following steps: 
+							<ol>
+								<li>
+									Placing a stone of their color on an empty intersection
+								</li>
+								<li>
+									Removing from the board any stones of their opponent's color that have no liberties.
+								</li>
+								<li>
+									Removing from the board any stones of their own color that have no liberties.
+								</li>
+							</ol>
+						</li>
+						<li>
+							A play is illegal if it would have the effect (after all steps of the play have been completed) of creating a position that has occurred previously in the game.
+						</li>
+						<li>
+							The game ends when both players have passed consecutively. The final position is the position on the board at the time the players pass consecutively. 
+						</li>
+					</ul>
+			</div>
+			<div id="nav">
+				<a id="rules-link" href="javascript:void(0)">rules</a>
+				<a class="hidden" id="front-link" href="javascript:void(0)">back</a>
+				|
+				<a id="github-link" target="_blank" href="https://github.com/llewellyn-kevin/go-board">github</a>
+			</div>
+		</div>
 		<div id="board"></div>
 
 		<script type="text/javascript" src="./jquery.min.js"></script>
 		<!--<script type="text/javascript" src="./vue.min.js"></script>-->
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-		<script type="text/javascript" src="./class/Board.js" /></script>
+		<script type="text/javascript" src="./script.js"></script>
+		<script type="text/javascript" src="./class/Board.js"></script>
 	</body>
 </html>
