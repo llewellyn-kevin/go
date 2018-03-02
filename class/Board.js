@@ -1,20 +1,120 @@
-/*function loc(_row, _col) {
+// object to contain the location of a piece, from 0 to 18
+function Loc(_row, _col) {
 	return {
 		row: _row,
 		col: _col
 	}
 }
 
-function blob() {
+// object to contain all members of a blob
+function Blob() {
 	this.locs = [];
 	this.addNew = function(_loc) {
 		this.locs.push(_loc);
 	}
 
-	return {
-		
+	return this;
+}
+
+// returns true if space has liberty
+function hasLiberty(_loc, _board) {
+	var x = _loc.row;
+	var y = _loc.col;
+	if((x > 0) && (!_board[x - 1][y]))
+		return true;
+	if((x < 18) && (!_board[x + 1][y]))
+		return true;
+	if((y < 18) && (!_board[x][y + 1]))
+		return true;
+	if((y > 0) && (!_board[x][y - 1]))
+		return true;
+	return false;
+}
+
+// function to check if blob should be removed
+function captured(_blob, _board) {
+	for(var i = 0; i < _blob.locs.length; i++) {
+		if(hasLiberty(_blob.locs[i], _board))
+			return false;
 	}
-}*/
+	return true;
+}
+
+// give blob with only first val and a map and a blob is recursively created
+// pass 0 for last 2 vals. dir { 0 => LEFT, 1 => UP, 2 => RIGHT, 3 => DOWN }
+function constructBlob(_blob, _board, curr, dir) {
+	if(curr === _blob.locs.length) {
+		return {
+			blob: _blob,
+			board: _board
+		};
+	}
+	
+	var current = {
+		x: _blob.locs[curr].row,
+		y: _blob.locs[curr].col
+	}
+	var place = _board[current.x][current.y];
+	var color = place.color;
+
+	switch(dir) {
+		case 0:
+			if(current.x == 0)
+				return constructBlob(_blob, _board, curr, 1);
+			if(color === _board[current.x - 1][current.y].color
+				&& !_board[current.x - 1][current.y].mapped)
+				_blob.locs.push(new Loc(current.x - 1, current.y));
+			return constructBlob(_blob, _board, curr, 1);
+		case 1:
+			if(current.y == 0)
+				return constructBlob(_blob, _board, curr, 2);
+			if(color === _board[current.x][current.y - 1].color
+				&& !_board[current.x][current.y - 1].mapped)
+				_blob.locs.push(new Loc(current.x, current.y - 1));
+			return constructBlob(_blob, _board, curr, 2);
+		case 2:
+			if(current.x == 18)
+				return constructBlob(_blob, _board, curr, 3);
+			if(color === _board[current.x + 1][current.y].color
+				&& !_board[current.x + 1][current.y].mapped)
+				_blob.locs.push(new Loc(current.x + 1, current.y));
+			return constructBlob(_blob, _board, curr, 3);
+		case 3:
+			if(current.y == 18)
+				return constructBlob(_blob, _board, curr, 4);
+			if(color === _board[current.x][current.y + 1].color
+				&& !_board[current.x][current.y + 1].mapped)
+				_blob.locs.push(new Loc(current.x, current.y + 1));
+			return constructBlob(_blob, _board, curr, 4);
+		default:
+			_board[current.x][current.y].mapped = true;
+			return constructBlob(_blob, _board, curr + 1, 0);
+
+	}
+}
+
+// give a map and all of the blobs are found
+function mapBlobs(_board) {
+	var blobs = new Array();
+
+	for(i = 0; i < _board.length; i++) {
+		for(j = 0; j < _board[i].length; j++) {
+			var space = _board[i][j];
+			if(space && !space.mapped) {
+				var tempBlob = new Blob();
+				tempBlob.addNew(new Loc(i, j));
+				var cb = constructBlob(tempBlob, _board, 0, 0);
+				blobs.push(cb.blob);
+				_board = cb.board;
+			}
+		}
+	}
+
+	return {
+		blobArr: blobs,
+		board: _board
+	}
+}
 
 var board = new Vue({
 	el: '#board',
@@ -126,13 +226,25 @@ var board = new Vue({
 				this.board[r][c] = {
 					color: this.turn,
 					x: currX,
-					y: currY
+					y: currY,
+					mapped: false
 				}
 
 				this.turn = (this.turn === 'black') ? 'white' : 'black';
 			}
 
 			this.buttonState = 'skip';
+
+			this.resetMapping();
+			map = mapBlobs(this.board);
+			this.board = map.board;
+			var blobs = map.blobArr;
+
+			for(i = 0; i < blobs.length; i++) {
+				if(captured(blobs[i], this.board)) {
+					console.log('CAPTURE ON BOARD');
+				}
+			}
 
 		},
 		skip: function(e) {
@@ -143,6 +255,14 @@ var board = new Vue({
 				$('#skip-button').html('Game Over!');
 				$('#black-hover-piece').remove();
 				$('#white-hover-piece').remove();
+			}
+		},
+		resetMapping: function() {
+			for(i = 0; i < this.board.length; i++) {
+				for(j = 0; j < this.board[i].length; j++) {
+					if(this.board[i][j])
+						this.board[i][j].mapped = false;
+				}
 			}
 		}
 	}
