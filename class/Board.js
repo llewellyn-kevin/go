@@ -91,8 +91,8 @@ var board = new Vue({
 			var buttonText = '{{turn}}\'s turn ({{buttonState}})';
 			html += '<div v-on:click="skip" id="skip-button">'+buttonText+'</div>';
 
-			html += '<img id="black-hover-piece" class="piece" v-on:click="click" src="./res/black.png" />';
-			html += '<img id="white-hover-piece" class="piece" v-on:click="click" src="./res/white.png" />';
+			html += '<img v-if="turn === \'black\'" id="black-hover-piece" class="piece" v-on:click="click" src="./res/black.png" />';
+			html += '<img v-if="turn === \'white\'" id="white-hover-piece" class="piece" v-on:click="click" src="./res/white.png" />';
 
 			$('div#board').html(html);
 		},
