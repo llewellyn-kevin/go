@@ -1,3 +1,21 @@
+/*function loc(_row, _col) {
+	return {
+		row: _row,
+		col: _col
+	}
+}
+
+function blob() {
+	this.locs = [];
+	this.addNew = function(_loc) {
+		this.locs.push(_loc);
+	}
+
+	return {
+		
+	}
+}*/
+
 var board = new Vue({
 	el: '#board',
 	data: {
@@ -6,7 +24,8 @@ var board = new Vue({
 		currHover: {
 			row: -1,
 			col: -1
-		}
+		},
+		buttonState: 'skip'
 	},
 	created: function() {
 		for(var i = 0; i < 19; i++)
@@ -69,6 +88,9 @@ var board = new Vue({
 				}
 			}
 
+			var buttonText = '{{turn}}\'s turn ({{buttonState}})';
+			html += '<div id="skip-button">'+buttonText+'</div>';
+
 			html += '<img id="black-hover-piece" class="piece" v-on:click="click" src="./res/black.png" />';
 			html += '<img id="white-hover-piece" class="piece" v-on:click="click" src="./res/white.png" />';
 
@@ -110,7 +132,11 @@ var board = new Vue({
 				this.turn = (this.turn === 'black') ? 'white' : 'black';
 			}
 
-		}
+			this.buttonState = 'skip';
 
+		},
+		skip: function(e) {
+				
+		}
 	}
 });

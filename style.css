@@ -68,8 +68,18 @@ div#board {
 }
 
 div#board img {
-	width: 38px;
-	height: 38px;
+	width: 37px;
+	height: 37px;
+}
+
+div#board div#skip-button {
+	width: calc(100% - 55px);
+	background-color: #ff2d2d;
+	color: #ffffff;
+	text-align: center;
+	cursor: pointer;
+	margin: 0 18px;
+	padding: 10px;
 }
 
 img.piece {
