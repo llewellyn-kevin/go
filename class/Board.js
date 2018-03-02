@@ -218,7 +218,8 @@ var board = new Vue({
 
 			var style = 'style="top:'+currY+';left:'+currX+';"';
 			var src = 'src="./res/' + this.turn + '.png"';
-			var html = '<img class="piece" '+style+' '+src+' />';
+			var id = 'id="placed-'+r+'-'+c+'"';
+			var html = '<img '+id+' class="piece" '+style+' '+src+' />';
 
 			$('div#board').append(html);
 
@@ -242,7 +243,12 @@ var board = new Vue({
 
 			for(i = 0; i < blobs.length; i++) {
 				if(captured(blobs[i], this.board)) {
-					console.log('CAPTURE ON BOARD');
+					for(j = 0; j < blobs[i].locs.length; j++) {
+						var ploc = blobs[i].locs[j];
+						var id = '#placed-' + ploc.row + '-' + ploc.col;
+						$(id).remove();
+						this.board[ploc.row][ploc.col] = false;
+					}
 				}
 			}
 
